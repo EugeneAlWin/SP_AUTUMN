@@ -5,6 +5,7 @@
 WCHAR ServiceName[] = { SERVICENAME };
 SERVICE_STATUS_HANDLE   hServiceStatus;
 SERVICE_STATUS          ServiceStatus;
+PROCESS_INFORMATION* pi;
 
 
 PROCESS_INFORMATION* OpenHT()
@@ -93,7 +94,6 @@ VOID WINAPI  ServiceMain(DWORD dwArgc, LPTSTR* lpszArgv)
 		return;
 	}
 
-	PROCESS_INFORMATION* pi;
 	if (!(pi = OpenHT()))
 	{
 		sprintf_s(temp, "\nOpenHT failed, error code = %d\n", GetLastError());
@@ -144,6 +144,7 @@ VOID WINAPI ServiceHandler(DWORD fdwControl)
 		ServiceStatus.dwCurrentState = SERVICE_STOPPED;
 		ServiceStatus.dwCheckPoint = 0;
 		ServiceStatus.dwWaitHint = 0;
+		TerminateProcess(pi->hProcess, 0);
 		SetEvent(hStopEventExist);
 		SetEvent(hStopEvent);
 		break;

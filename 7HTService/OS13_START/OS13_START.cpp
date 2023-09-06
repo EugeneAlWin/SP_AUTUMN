@@ -29,8 +29,8 @@ int main(int argc, char* argv[])
 	wchar_t* fileName{ nullptr };
 	const std::wstring directoryPath = L"..\\..\\HT";
 	std::wstring filePath(L"..\\HT\\test.ht");
-	wchar_t* HTUsers{nullptr};
-	wchar_t* HTPassword{nullptr};
+	wchar_t* HTUsers{ nullptr };
+	wchar_t* HTPassword{ nullptr };
 
 	HANDLE hStopEvent = CreateEvent(NULL,
 		TRUE, //FALSE - автоматический сброс; TRUE - ручной
@@ -39,13 +39,13 @@ int main(int argc, char* argv[])
 
 	try {
 
-		if (argv[1]) 
+		if (argv[1])
 		{
 			fileName = GetWC(argv[1]);
 			std::wstring s(directoryPath);
 			s += L"\\" + std::wstring(fileName);
 			filePath = s;
-			if(argc == 4)
+			if (argc == 4)
 			{
 				HTUsers = GetWC(argv[2]);
 				std::wcout << HTUsers << std::endl;
@@ -76,14 +76,10 @@ int main(int argc, char* argv[])
 				throw "Error open";
 		}
 
-		while (WaitForSingleObject(hStopEvent, 0) == WAIT_TIMEOUT)
-		{
-		}
+		WaitForSingleObject(hStopEvent, INFINITE);
+
 
 		HT_LIB::HT::Close(ht, HT);
-
-		//trace("CLOSE");
-
 		HT_LIB::Dispose(ht);
 		return 0;
 	}

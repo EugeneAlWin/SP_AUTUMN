@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
 	SERVICE_STATUS status;
 	try
 	{
-		schSCManager = OpenSCManagerW(NULL, NULL, GENERIC_ALL);
+		schSCManager = OpenSCManagerW(NULL, NULL, SC_MANAGER_ALL_ACCESS);
 		if (!schSCManager)
 			throw errortxt("OpenSCManager", GetLastError());
 

@@ -102,7 +102,8 @@ int main(int argc, char* argv[])
 				throw "Invalid handle";
 		}
 
-		while (WaitForSingleObject(hStopEvent, 0) == WAIT_TIMEOUT)
+
+		while (true)
 		{
 			int numberKey = rand() % 50 + 1;
 			std::string key{};
@@ -128,8 +129,15 @@ int main(int argc, char* argv[])
 			WaitForSingleObject(hThread, INFINITE);
 			CloseHandle(hThread);
 
+			if (WaitForSingleObject(hStopEvent, 0) != WAIT_TIMEOUT) {
+				HT_LIB::HT::Close(ht, HT);
+				HT_LIB::Dispose(ht);
+				return 0;
+			}
+
 			Sleep(1000);
 		}
+		return 0;
 	}
 	catch (const char* err)
 	{
