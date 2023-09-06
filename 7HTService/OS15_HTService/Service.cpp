@@ -2,11 +2,10 @@
 #include "HT_LIB.h"
 
 
-WCHAR ServiceName[] = SERVICENAME;
+WCHAR ServiceName[] = { SERVICENAME };
 SERVICE_STATUS_HANDLE   hServiceStatus;
 SERVICE_STATUS          ServiceStatus;
 
-BOOL bServicePause = false;
 
 PROCESS_INFORMATION* OpenHT()
 {
@@ -19,7 +18,7 @@ PROCESS_INFORMATION* OpenHT()
 	std::wstring szExePath = L"C:\\BSTU\\sysprog\\7HTService\\x64\\Debug\\OS15_START.exe C:\\BSTU\\sysprog\\7HTService\\HT\\test.ht";
 
 	// Запуск внешней программы
-	if (!CreateProcess(NULL, const_cast<LPWSTR>(szExePath.c_str()), NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi))
+	if (!CreateProcessW(NULL, const_cast<LPWSTR>(szExePath.c_str()), NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi))
 	{
 		char temp[121];
 		sprintf_s(temp, "\nCreateProcess failed, error code = %d\n", GetLastError());
@@ -102,7 +101,6 @@ VOID WINAPI  ServiceMain(DWORD dwArgc, LPTSTR* lpszArgv)
 		return;
 	}
 
-	//system("start \"\" \"T:\\\\C3S2\\\\OS\\\\HTService\\\\x64\\\\Debug\\\\OS1_START.exe\" \"D:\\\\C3S2\\\\OS\\\\HTService\\\\HT\\\\storage.ht\"");
 
 	trace("Start Service", std::ofstream::out);
 	while (ServiceStatus.dwCurrentState == SERVICE_RUNNING)
@@ -132,7 +130,8 @@ VOID WINAPI ServiceHandler(DWORD fdwControl)
 		FALSE,
 		L"Global\\HTStop");
 
-	HANDLE hStopEventExist = CreateEvent(NULL,
+	HANDLE hStopEventExist = CreateEventW(
+		NULL,
 		TRUE,
 		FALSE,
 		L"Global\\HTStopExist");

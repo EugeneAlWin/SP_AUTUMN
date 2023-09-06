@@ -65,7 +65,7 @@ int main(int argc, char* argv[])
 		}
 		else if (std::string(argv[1]) == "/start")
 		{
-			schService = OpenService(schSCManager, SERVICENAME, SERVICE_START);
+			schService = OpenServiceW(schSCManager, SERVICENAME, GENERIC_ALL);
 			if (!schService)
 			{
 				printf("Failed to open service. Error code: %d\n", GetLastError());

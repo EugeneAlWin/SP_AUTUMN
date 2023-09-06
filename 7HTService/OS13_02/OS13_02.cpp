@@ -9,11 +9,15 @@
 #include <chrono>
 #include <iomanip>
 #include <fstream>
+#include <windows.h>
+#include <stdio.h>
 
 HANDLE mutexName;
+constexpr auto TRACEPATH = "D:\\02.trace";
+HANDLE hThread;
+OS13HANDEL ht = nullptr;
 
-#define TRACEPATH "D:\\02.trace"
-
+HTHANDLE* HT;
 void trace(const char* msg, int r = std::ofstream::out)
 {
 	std::ofstream out;
@@ -31,21 +35,30 @@ wchar_t* GetWC(const char* c)
 	return wc;
 }
 
-void printStr(char* str) {
-	std::cout << "ERROR:\t";
-	int i = 0;
-	while (str[i]) {
-		std::cout << str[i];
-		i++;
+
+BOOL WINAPI CtrlHandler(DWORD fdwCtrlType)
+{
+	switch (fdwCtrlType)
+	{
+		// Handle the CTRL-C signal.
+	case CTRL_C_EVENT:
+	case CTRL_CLOSE_EVENT:
+		printf("Ctrl-C event\n\n");
+		CloseHandle(hThread);
+		HT_LIB::HT::Close(ht, HT);
+		HT_LIB::Dispose(ht);
+		return FALSE;
+
+
+	default:
+		return FALSE;
 	}
-	std::cout << std::endl;
 }
 
 int main(int argc, char* argv[])
 {
+	SetConsoleCtrlHandler(CtrlHandler, TRUE); // Для обработки прерывания через ctrl-c
 	srand(time(0));
-
-	OS13HANDEL ht = nullptr;
 
 	wchar_t* fileName;
 	const wchar_t* directoryPath = L"..\\..\\HT";
@@ -75,7 +88,6 @@ int main(int argc, char* argv[])
 
 		ht = HT_LIB::Init();
 
-		HTHANDLE* HT;
 
 		if (HTUsers.empty())
 		{
@@ -111,7 +123,7 @@ int main(int argc, char* argv[])
 				HT_LIB::HT::print(ht, el);
 
 			std::tuple<Element*, bool, std::wstring, std::wstring> pr{ el,success, filePath, std::wstring(L"Insert") };
-			HANDLE hThread = CreateThread(NULL, 0, HT_LIB::HT::RecordingWork, &pr, 0, NULL);
+			hThread = CreateThread(NULL, 0, HT_LIB::HT::RecordingWork, &pr, 0, NULL);
 
 			WaitForSingleObject(hThread, INFINITE);
 			CloseHandle(hThread);
