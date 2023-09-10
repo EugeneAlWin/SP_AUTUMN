@@ -71,7 +71,7 @@ HTHANDLE* HT_LIB::HT::Create(OS13HANDEL h, int Capacity, int SecSnapshotInterval
 		if (!SUCCEEDED(hr = static_cast<IUnknown*>(h)->QueryInterface(IID_IHT, (void**)&p_Ht)))
 			throw hr;
 
-		HTHANDLE *ht{nullptr};
+		HTHANDLE* ht{ nullptr };
 		if ((ht = p_Ht->Create(Capacity, SecSnapshotInterval, MaxKeyLength, MaxPayloadLength, HTUsersGroup, FileName)) == NULL)
 			throw "Error create ht";
 		p_Ht->Release();
@@ -145,7 +145,7 @@ HTHANDLE* HT_LIB::HT::Open(OS13HANDEL h, const std::wstring HTUser, const std::w
 
 HTHANDLE* HT_LIB::HT::OpenExist(OS13HANDEL h, std::wstring FileName)
 {
-	HTHANDLE* ht{nullptr};
+	HTHANDLE* ht{ nullptr };
 	try
 	{
 		HRESULT hr{};
@@ -178,7 +178,7 @@ HTHANDLE* HT_LIB::HT::OpenExist(void* h, std::wstring HTUser, std::wstring HTPas
 		if (!SUCCEEDED((hr = static_cast<IUnknown*>(h)->QueryInterface(IID_IHT, (void**)&p_Ht))))
 			throw hr;
 
-		if ((ht = p_Ht->OpenExist(HTUser, HTPassword,FileName)) == NULL)
+		if ((ht = p_Ht->OpenExist(HTUser, HTPassword, FileName)) == NULL)
 			throw "Error open exist HT";
 		p_Ht->Release();
 		return ht;
@@ -203,7 +203,7 @@ BOOL HT_LIB::HT::Insert(OS13HANDEL h, HTHANDLE* ht, Element* el)
 		if (!SUCCEEDED((hr = static_cast<IUnknown*>(h)->QueryInterface(IID_IHT, (void**)&p_Ht))))
 			throw hr;
 
-		if(!SUCCEEDED(hr = p_Ht->Insert(ht, el)))
+		if (!SUCCEEDED(hr = p_Ht->Insert(ht, el)))
 			throw hr;
 
 		p_Ht->Release();
@@ -224,7 +224,7 @@ Element* HT_LIB::HT::Get(OS13HANDEL h, HTHANDLE* ht, Element* el)
 		if (!SUCCEEDED((hr = static_cast<IUnknown*>(h)->QueryInterface(IID_IHT, (void**)&p_Ht))))
 			throw hr;
 
-		Element* nel{nullptr};
+		Element* nel{ nullptr };
 		if ((nel = p_Ht->Get(ht, el)) == NULL)
 			return NULL;
 		p_Ht->Release();
@@ -250,7 +250,7 @@ BOOL HT_LIB::HT::Update(OS13HANDEL h, HTHANDLE* hthandle, Element* oldelement, E
 		if (!SUCCEEDED((hr = static_cast<IUnknown*>(h)->QueryInterface(IID_IHT, (void**)&p_Ht))))
 			throw hr;
 
-		if(!SUCCEEDED(hr = p_Ht->Update(hthandle, oldelement, newelement->payload, newelement->payloadlength)))
+		if (!SUCCEEDED(hr = p_Ht->Update(hthandle, oldelement, newelement->payload, newelement->payloadlength)))
 			throw hr;
 		p_Ht->Release();
 		return TRUE;
@@ -275,7 +275,7 @@ void HT_LIB::HT::Close(OS13HANDEL h, const HTHANDLE* ht)
 
 		p_Ht->Release();
 	}
-	catch(HRESULT rc)
+	catch (HRESULT rc)
 	{
 		OutputErrorHandle(rc);
 	}
@@ -289,7 +289,7 @@ BOOL HT_LIB::HT::Delete(OS13HANDEL h, HTHANDLE* ht, Element* el)
 		if (!SUCCEEDED((hr = static_cast<IUnknown*>(h)->QueryInterface(IID_IHT, (void**)&p_Ht))))
 			throw hr;
 
-		if(!SUCCEEDED(hr = p_Ht->Delete(ht, el)))
+		if (!SUCCEEDED(hr = p_Ht->Delete(ht, el)))
 			throw hr;
 		p_Ht->Release();
 		return TRUE;
@@ -308,8 +308,8 @@ char* HT_LIB::HT::GetLastError(OS13HANDEL h, HTHANDLE* ht)
 		HRESULT hr{};
 		if (!SUCCEEDED((hr = static_cast<IUnknown*>(h)->QueryInterface(IID_IHT, (void**)&p_Ht))))
 			throw hr;
-		char* err{nullptr};
-		if((err = p_Ht->GetLastErrorProg(ht)) == NULL)
+		char* err{ nullptr };
+		if ((err = p_Ht->GetLastErrorProg(ht)) == NULL)
 			throw "Error get string err";
 		p_Ht->Release();
 		return err;
@@ -329,7 +329,7 @@ void HT_LIB::HT::print(OS13HANDEL h, const Element* el)
 		if (!SUCCEEDED((hr = static_cast<IUnknown*>(h)->QueryInterface(IID_IHT, (void**)&p_Ht))))
 			throw hr;
 
-		if(!SUCCEEDED(hr = p_Ht->print(el)))
+		if (!SUCCEEDED(hr = p_Ht->print(el)))
 			throw hr;
 
 		p_Ht->Release();

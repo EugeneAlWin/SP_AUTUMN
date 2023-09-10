@@ -126,16 +126,17 @@ int main(int argc, char* argv[])
 			std::tuple<Element*, bool, std::wstring, std::wstring> pr{ el,success, filePath, std::wstring(L"Insert") };
 			hThread = CreateThread(NULL, 0, HT_LIB::HT::RecordingWork, &pr, 0, NULL);
 
-			WaitForSingleObject(hThread, INFINITE);
-			CloseHandle(hThread);
-
-			if (WaitForSingleObject(hStopEvent, 0) != WAIT_TIMEOUT) {
-				HT_LIB::HT::Close(ht, HT);
-				HT_LIB::Dispose(ht);
-				return 0;
+			if (hThread) {
+				WaitForSingleObject(hThread, INFINITE);
+				CloseHandle(hThread);
 			}
+			if (hStopEvent)
+				if (WaitForSingleObject(hStopEvent, 1000) != WAIT_TIMEOUT) {
+					HT_LIB::HT::Close(ht, HT);
+					HT_LIB::Dispose(ht);
+					return 0;
+				}
 
-			Sleep(1000);
 		}
 		return 0;
 	}

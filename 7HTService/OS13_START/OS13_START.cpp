@@ -25,7 +25,7 @@ wchar_t* GetWC(const char* c)
 int main(int argc, char* argv[])
 {
 	OS13HANDEL ht = nullptr;
-	char temp[121];
+	char temp[121]{};
 	wchar_t* fileName{ nullptr };
 	const std::wstring directoryPath = L"..\\..\\HT";
 	std::wstring filePath(L"..\\HT\\test.ht");
@@ -76,11 +76,13 @@ int main(int argc, char* argv[])
 				throw "Error open";
 		}
 
-		WaitForSingleObject(hStopEvent, INFINITE);
+		if (hStopEvent)
+			WaitForSingleObject(hStopEvent, INFINITE);
 
 
 		HT_LIB::HT::Close(ht, HT);
 		HT_LIB::Dispose(ht);
+		ExitThread(0);
 		return 0;
 	}
 	catch (const char* err)

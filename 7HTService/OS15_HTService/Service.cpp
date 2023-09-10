@@ -130,7 +130,7 @@ VOID WINAPI ServiceHandler(DWORD fdwControl)
 		FALSE,
 		L"Global\\HTStop");
 
-	HANDLE hStopEventExist = CreateEventW(
+	HANDLE hStopEventExist = CreateEvent(
 		NULL,
 		TRUE,
 		FALSE,
@@ -144,9 +144,9 @@ VOID WINAPI ServiceHandler(DWORD fdwControl)
 		ServiceStatus.dwCurrentState = SERVICE_STOPPED;
 		ServiceStatus.dwCheckPoint = 0;
 		ServiceStatus.dwWaitHint = 0;
-		TerminateProcess(pi->hProcess, 0);
 		SetEvent(hStopEventExist);
 		SetEvent(hStopEvent);
+		TerminateProcess(pi->hProcess, 0);
 		break;
 
 	case SERVICE_CONTROL_PAUSE:

@@ -28,8 +28,9 @@ int main(int argc, char* argv[])
 			throw "Invalid handle";
 
 		HT_LIB::HT::Close(ht, HT);
+		HT_LIB::Dispose(ht);
 	}
-	catch(char* r)
+	catch (char* r)
 	{
 		std::cout << r << std::endl;
 	}
